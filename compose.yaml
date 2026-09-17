@@ -1,0 +1,27 @@
+services:
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: vite_gourmand
+      POSTGRES_USER: vite_gourmand
+      POSTGRES_PASSWORD: vite_gourmand_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:8
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: vite_gourmand
+      MONGO_INITDB_ROOT_PASSWORD: vite_gourmand_password
+    volumes:
+      - mongodb_data:/data/db
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+volumes:
+  postgres_data:
+  mongodb_data:
