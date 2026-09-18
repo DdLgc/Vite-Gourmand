@@ -16,17 +16,17 @@ services:
   database:
     image: postgres:17
     environment:
-      POSTGRES_DB: vite_gourmand
-      POSTGRES_USER: vite_gourmand
-      POSTGRES_PASSWORD: vite_gourmand_password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   mongodb:
     image: mongo:8
     environment:
-      MONGO_INITDB_ROOT_USERNAME: vite_gourmand
-      MONGO_INITDB_ROOT_PASSWORD: vite_gourmand_password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb_data:/data/db
 

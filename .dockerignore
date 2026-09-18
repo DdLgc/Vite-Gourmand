@@ -8,3 +8,4 @@ var/
 node_modules/
 npm-debug.log
 docs/
+.env.docker
