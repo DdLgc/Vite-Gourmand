@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=17&charset=utf8"
     ports:
       - "8000:8000"
     volumes:
