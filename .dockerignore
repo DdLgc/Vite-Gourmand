@@ -1,0 +1,11 @@
+.git
+.gitignore
+.dockerignore
+vendor/
+var/
+.env.local
+.env.*.local
+node_modules/
+npm-debug.log
+docs/
+.env.docker
