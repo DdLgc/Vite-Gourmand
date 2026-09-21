@@ -64,6 +64,12 @@ class Menu
     #[ORM\InverseJoinColumn(name: 'dish_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $dishes;
 
+    /**
+     * @var Collection<int, CustomerOrder>
+     */
+    #[ORM\OneToMany(targetEntity: CustomerOrder::class, mappedBy: 'menu')]
+    private Collection $orders;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -183,6 +189,7 @@ class Menu
         $this->updatedAt = new \DateTimeImmutable();
         $this->images = new ArrayCollection();
         $this->dishes = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -259,6 +266,36 @@ class Menu
     public function removeDish(Dish $dish): static
     {
         $this->dishes->removeElement($dish);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CustomerOrder>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(CustomerOrder $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(CustomerOrder $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getMenu() === $this) {
+                $order->setMenu(null);
+            }
+        }
 
         return $this;
     }
