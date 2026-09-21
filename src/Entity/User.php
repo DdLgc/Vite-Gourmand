@@ -59,11 +59,18 @@ class User
     #[ORM\OneToMany(targetEntity: CustomerOrder::class, mappedBy: 'customer')]
     private Collection $orders;
 
+    /**
+     * @var Collection<int, OrderStatusHistory>
+     */
+    #[ORM\OneToMany(targetEntity: OrderStatusHistory::class, mappedBy: 'changedBy')]
+    private Collection $orderStatusHistories;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->orders = new ArrayCollection();
+        $this->orderStatusHistories = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -239,6 +246,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($order->getCustomer() === $this) {
                 $order->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderStatusHistory>
+     */
+    public function getOrderStatusHistories(): Collection
+    {
+        return $this->orderStatusHistories;
+    }
+
+    public function addOrderStatusHistory(OrderStatusHistory $orderStatusHistory): static
+    {
+        if (!$this->orderStatusHistories->contains($orderStatusHistory)) {
+            $this->orderStatusHistories->add($orderStatusHistory);
+            $orderStatusHistory->setChangedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderStatusHistory(OrderStatusHistory $orderStatusHistory): static
+    {
+        if ($this->orderStatusHistories->removeElement($orderStatusHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($orderStatusHistory->getChangedBy() === $this) {
+                $orderStatusHistory->setChangedBy(null);
             }
         }
 

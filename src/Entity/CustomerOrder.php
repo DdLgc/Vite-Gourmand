@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CustomerOrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -61,10 +63,17 @@ class CustomerOrder
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $customer = null;
 
+    /**
+     * @var Collection<int, OrderStatusHistory>
+     */
+    #[ORM\OneToMany(targetEntity: OrderStatusHistory::class, mappedBy: 'customerOrder')]
+    private Collection $statusHistory;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->statusHistory = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -248,6 +257,36 @@ class CustomerOrder
     public function setCustomer(?User $customer): static
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderStatusHistory>
+     */
+    public function getStatusHistory(): Collection
+    {
+        return $this->statusHistory;
+    }
+
+    public function addStatusHistory(OrderStatusHistory $statusHistory): static
+    {
+        if (!$this->statusHistory->contains($statusHistory)) {
+            $this->statusHistory->add($statusHistory);
+            $statusHistory->setCustomerOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatusHistory(OrderStatusHistory $statusHistory): static
+    {
+        if ($this->statusHistory->removeElement($statusHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($statusHistory->getCustomerOrder() === $this) {
+                $statusHistory->setCustomerOrder(null);
+            }
+        }
 
         return $this;
     }
