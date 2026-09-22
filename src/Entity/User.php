@@ -65,12 +65,19 @@ class User
     #[ORM\OneToMany(targetEntity: OrderStatusHistory::class, mappedBy: 'changedBy')]
     private Collection $orderStatusHistories;
 
+    /**
+     * @var Collection<int, OrderContactLog>
+     */
+    #[ORM\OneToMany(targetEntity: OrderContactLog::class, mappedBy: 'employee')]
+    private Collection $orderContactLogs;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->orders = new ArrayCollection();
         $this->orderStatusHistories = new ArrayCollection();
+        $this->orderContactLogs = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -276,6 +283,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($orderStatusHistory->getChangedBy() === $this) {
                 $orderStatusHistory->setChangedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderContactLog>
+     */
+    public function getOrderContactLogs(): Collection
+    {
+        return $this->orderContactLogs;
+    }
+
+    public function addOrderContactLog(OrderContactLog $orderContactLog): static
+    {
+        if (!$this->orderContactLogs->contains($orderContactLog)) {
+            $this->orderContactLogs->add($orderContactLog);
+            $orderContactLog->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderContactLog(OrderContactLog $orderContactLog): static
+    {
+        if ($this->orderContactLogs->removeElement($orderContactLog)) {
+            // set the owning side to null (unless already changed)
+            if ($orderContactLog->getEmployee() === $this) {
+                $orderContactLog->setEmployee(null);
             }
         }
 

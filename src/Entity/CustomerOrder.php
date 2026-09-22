@@ -69,11 +69,18 @@ class CustomerOrder
     #[ORM\OneToMany(targetEntity: OrderStatusHistory::class, mappedBy: 'customerOrder')]
     private Collection $statusHistory;
 
+    /**
+     * @var Collection<int, OrderContactLog>
+     */
+    #[ORM\OneToMany(targetEntity: OrderContactLog::class, mappedBy: 'customerOrder')]
+    private Collection $contactLogs;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->statusHistory = new ArrayCollection();
+        $this->contactLogs = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -285,6 +292,36 @@ class CustomerOrder
             // set the owning side to null (unless already changed)
             if ($statusHistory->getCustomerOrder() === $this) {
                 $statusHistory->setCustomerOrder(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderContactLog>
+     */
+    public function getContactLogs(): Collection
+    {
+        return $this->contactLogs;
+    }
+
+    public function addContactLog(OrderContactLog $contactLog): static
+    {
+        if (!$this->contactLogs->contains($contactLog)) {
+            $this->contactLogs->add($contactLog);
+            $contactLog->setCustomerOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactLog(OrderContactLog $contactLog): static
+    {
+        if ($this->contactLogs->removeElement($contactLog)) {
+            // set the owning side to null (unless already changed)
+            if ($contactLog->getCustomerOrder() === $this) {
+                $contactLog->setCustomerOrder(null);
             }
         }
 
