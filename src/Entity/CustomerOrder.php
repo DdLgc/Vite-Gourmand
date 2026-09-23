@@ -75,6 +75,9 @@ class CustomerOrder
     #[ORM\OneToMany(targetEntity: OrderContactLog::class, mappedBy: 'customerOrder')]
     private Collection $contactLogs;
 
+    #[ORM\OneToOne(mappedBy: 'customerOrder', targetEntity: Review::class)]
+    private ?Review $review = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -323,6 +326,22 @@ class CustomerOrder
             if ($contactLog->getCustomerOrder() === $this) {
                 $contactLog->setCustomerOrder(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getReview(): ?Review
+    {
+        return $this->review;
+    }
+
+    public function setReview(?Review $review): static
+    {
+        $this->review = $review;
+
+        if ($review !== null && $review->getCustomerOrder() !== $this) {
+            $review->setCustomerOrder($this);
         }
 
         return $this;

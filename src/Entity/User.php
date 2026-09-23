@@ -71,6 +71,12 @@ class User
     #[ORM\OneToMany(targetEntity: OrderContactLog::class, mappedBy: 'employee')]
     private Collection $orderContactLogs;
 
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author')]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -78,6 +84,7 @@ class User
         $this->orders = new ArrayCollection();
         $this->orderStatusHistories = new ArrayCollection();
         $this->orderContactLogs = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -313,6 +320,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($orderContactLog->getEmployee() === $this) {
                 $orderContactLog->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getAuthor() === $this) {
+                $review->setAuthor(null);
             }
         }
 
