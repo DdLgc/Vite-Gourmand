@@ -1,0 +1,47 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ menu.title }} | Vite & Gourmand{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_menu_index') }}">
+        ← Retour aux menus
+    </a>
+
+    <article>
+        <h1>{{ menu.title }}</h1>
+
+        <p>{{ menu.description }}</p>
+
+        <h2>Informations</h2>
+
+        <p><strong>Thème :</strong> {{ menu.theme }}</p>
+        <p><strong>Régime :</strong> {{ menu.diet }}</p>
+        <p><strong>Nombre minimum :</strong> {{ menu.minimumPeople }} personnes</p>
+
+        <p class="price">
+            {{ (menu.basePriceCents / 100)|number_format(2, ',', ' ') }} €
+        </p>
+
+        <h2>Plats proposés</h2>
+
+        {% if menu.dishes is empty %}
+            <p>Aucun plat renseigné.</p>
+        {% else %}
+            <ul>
+                {% for dish in menu.dishes %}
+                    <li>{{ dish.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <h2>Conditions</h2>
+        <p>{{ menu.conditions }}</p>
+
+        {% if menu.availableStock > 0 %}
+            <p>Ce menu est actuellement disponible.</p>
+        {% else %}
+            <p>Ce menu est actuellement indisponible.</p>
+        {% endif %}
+    </article>
+{% endblock %}

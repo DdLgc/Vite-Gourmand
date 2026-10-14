@@ -1,0 +1,50 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos menus | Vite & Gourmand{% endblock %}
+
+{% block body %}
+    <h1>Nos menus</h1>
+    <p>Découvrez nos menus pour vos événements.</p>
+
+    {% if menus is empty %}
+        <p>Aucun menu n'est disponible pour le moment.</p>
+    {% else %}
+        <div class="menu-grid">
+            {% for menu in menus %}
+                <article class="menu-card">
+                    <h2>{{ menu.title }}</h2>
+
+                    <p>{{ menu.description }}</p>
+
+                    <p>
+                        <strong>Thème :</strong> {{ menu.theme }}
+                    </p>
+
+                    <p>
+                        <strong>Régime :</strong> {{ menu.diet }}
+                    </p>
+
+                    <p>
+                        À partir de {{ menu.minimumPeople }} personnes
+                    </p>
+
+                    <p class="price">
+                        {{ (menu.basePriceCents / 100)|number_format(2, ',', ' ') }} €
+                    </p>
+
+                    {% if menu.availableStock > 0 %}
+                        <p>Disponible</p>
+                    {% else %}
+                        <p>Indisponible actuellement</p>
+                    {% endif %}
+
+                    <a class="button"
+                       href="{{ path('app_menu_show', {id: menu.id}) }}">
+                        Voir le menu
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
