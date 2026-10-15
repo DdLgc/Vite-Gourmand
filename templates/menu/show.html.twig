@@ -23,17 +23,41 @@
             {{ (menu.basePriceCents / 100)|number_format(2, ',', ' ') }} €
         </p>
 
+
         <h2>Plats proposés</h2>
 
         {% if menu.dishes is empty %}
-            <p>Aucun plat renseigné.</p>
+            <p>Aucun plat renseigné pour ce menu.</p>
         {% else %}
             <ul>
                 {% for dish in menu.dishes %}
-                    <li>{{ dish.name }}</li>
+                    <li>
+                        <h3>{{ dish.name }}</h3>
+
+                        {% if dish.description %}
+                            <p>{{ dish.description }}</p>
+                        {% endif %}
+
+                        <p>
+                            <strong>Type :</strong>
+                            {{ dish.courseType }}
+                        </p>
+
+                        {% if dish.allergens is not empty %}
+                            <p>
+                                <strong>Allergènes :</strong>
+                                {% for allergen in dish.allergens %}
+                                    {{ allergen.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% else %}
+                            <p>Aucun allergène renseigné.</p>
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}
+
 
         <h2>Conditions</h2>
         <p>{{ menu.conditions }}</p>
