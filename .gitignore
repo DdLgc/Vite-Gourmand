@@ -10,3 +10,6 @@
 
 ###> Docker local env ###
 /.env.docker
+
+###> Node modules
+/node_modules/
