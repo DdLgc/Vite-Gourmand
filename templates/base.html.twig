@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Vite & Gourmand{% endblock %}</title>
+    <meta name="description" content="Vite & Gourmand, traiteur à Bordeaux depuis 25 ans.">
+
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a class="brand" href="{{ path('app_home') }}">Vite & Gourmand</a>
+
+            <nav aria-label="Navigation principale">
+                <a href="{{ path('app_home') }}">Accueil</a>
+                <a href="{{ path('app_menu_index') }}">Nos menus</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© {{ "now"|date("Y") }} Vite & Gourmand — Traiteur à Bordeaux.</p>
+        </div>
+    </footer>
+</body>
+</html>
