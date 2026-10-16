@@ -1,61 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil — Vite & Gourmand{% endblock %}
+{% block title %}Nos menus — Vite & Gourmand{% endblock %}
 
 {% block body %}
-    <section class="hero">
-        <div class="container">
-            <span class="eyebrow">Traiteur à Bordeaux depuis 25 ans</span>
-
-            <h1>Le plaisir de recevoir,<br>le goût du partage.</h1>
-
-            <p>
-                Julie et José vous accompagnent dans vos événements
-                avec des menus préparés pour chaque occasion.
-            </p>
-
-            <a class="button button-primary" href="{{ path('app_menu_index') }}">
-                Découvrir nos menus
-            </a>
-        </div>
-    </section>
-
     <section class="section">
         <div class="container">
-            <span class="eyebrow">Notre sélection</span>
-            <h2>Des menus pour chaque occasion</h2>
+            <span class="eyebrow">Notre carte</span>
+            <h1>Nos menus</h1>
+            <p>Découvrez les menus proposés pour vos événements.</p>
 
-            {% if menus is empty %}
-                <p>Aucun menu disponible pour le moment.</p>
-            {% else %}
-                <div class="menu-grid">
-                    {% for menu in menus %}
-                        <article class="menu-card">
-                            <div class="menu-card-content">
-                                <span class="eyebrow">{{ menu.theme }}</span>
-
-                                <h3>{{ menu.title }}</h3>
-
-                                <p>{{ menu.description }}</p>
-
-                                <div class="menu-card-meta">
-                                    <span>Dès {{ menu.minimumPeople }} personnes</span>
-
-                                    <strong>
-                                        {{ (menu.basePriceCents / 100)|number_format(2, ',', ' ') }} €
-                                        / personne
-                                    </strong>
-                                </div>
-
-                                <a class="text-link"
-                                   href="{{ path('app_menu_show', {id: menu.id}) }}">
-                                    Voir le menu →
-                                </a>
-                            </div>
-                        </article>
-                    {% endfor %}
+            <div class="filters" role="group" aria-label="Filtres des menus">
+                <div>
+                    <label for="theme-filter">Thème</label>
+                    <select id="theme-filter">
+                        <option value="">Tous les thèmes</option>
+                        {% for menu in menus %}
+                            <option value="{{ menu.theme }}">{{ menu.theme }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-            {% endif %}
+
+                <div>
+                    <label for="diet-filter">Régime alimentaire</label>
+                    <select id="diet-filter">
+                        <option value="">Tous les régimes</option>
+                        {% for menu in menus %}
+                            <option value="{{ menu.diet }}">{{ menu.diet }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="price-filter">Budget maximum par personne (€)</label>
+                    <input
+                        id="price-filter"
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="Ex. : 40"
+                    >
+                </div>
+
+                <div>
+                    <label for="people-filter">Nombre de personnes</label>
+                    <input
+                        id="people-filter"
+                        type="number"
+                        min="1"
+                        step="1"
+                        placeholder="Ex. : 6"
+                    >
+                </div>
+
+                <button id="reset-filters" type="button">
+                    Réinitialiser
+                </button>
+            </div>
+
+            <p id="results-count" role="status" aria-live="polite"></p>
+
+            <div class="menu-grid">
+                {% for menu in menus %}
+                    <article
+                        class="menu-card"
+                        data-theme="{{ menu.theme }}"
+                        data-diet="{{ menu.diet }}"
+                        data-price="{{ menu.basePriceCents }}"
+                        data-min-people="{{ menu.minimumPeople }}"
+                    >
+                        <div class="menu-card-content">
+                            <span class="eyebrow">{{ menu.theme }}</span>
+                            <h2>{{ menu.title }}</h2>
+                            <p>{{ menu.description }}</p>
+
+                            <div class="menu-card-meta">
+                                <span>Dès {{ menu.minimumPeople }} personnes</span>
+                                <strong>
+                                    {{ (menu.basePriceCents / 100)|number_format(2, ',', ' ') }}
+                                    € / personne
+                                </strong>
+                            </div>
+
+                            <a
+                                class="text-link"
+                                href="{{ path('app_menu_show', {id: menu.id}) }}"
+                            >
+                                Voir le menu →
+                            </a>
+                        </div>
+                    </article>
+                {% else %}
+                    <p>Aucun menu disponible pour le moment.</p>
+                {% endfor %}
+            </div>
+
+            <p id="no-results" hidden>
+                Aucun menu ne correspond aux critères sélectionnés.
+            </p>
         </div>
     </section>
+
+    <script src="{{ asset('js/menu-filters.js') }}" defer></script>
 {% endblock %}
