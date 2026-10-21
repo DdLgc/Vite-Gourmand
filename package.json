@@ -1,0 +1,11 @@
+{
+  "description": "",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "scripts": {
+  "build": "node ./node_modules/typescript/bin/tsc",
+  "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
+  "watch": "node ./node_modules/typescript/bin/tsc --watch"
+}
+}
