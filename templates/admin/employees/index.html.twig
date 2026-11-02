@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des employés | Vite & Gourmand{% endblock %}
+
+{% block body %}
+    <section class="container admin-dashboard">
+        <h1>Gestion des employés</h1>
+
+        <p>Consultez les comptes employés de Vite & Gourmand.</p>
+
+        {% if employees is not empty %}
+            <div class="table-responsive">
+                <table class="employees-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Téléphone</th>
+                            <th scope="col">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                            <tr>
+                                <td>{{ employee.lastName }}</td>
+                                <td>{{ employee.firstName }}</td>
+                                <td>{{ employee.email }}</td>
+                                <td>{{ employee.phone }}</td>
+                                <td>
+                                    {{ employee.active ? 'Actif' : 'Inactif' }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>Aucun employé enregistré.</p>
+        {% endif %}
+    </section>
+{% endblock %}

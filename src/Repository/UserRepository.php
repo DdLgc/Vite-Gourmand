@@ -15,6 +15,34 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+    public function findEmployees(): array
+{
+    $connection = $this->getEntityManager()->getConnection();
+
+    $ids = $connection->fetchFirstColumn(
+        <<<SQL
+            SELECT id
+            FROM app_user
+            WHERE roles::jsonb @> :role::jsonb
+            ORDER BY last_name ASC, first_name ASC
+        SQL,
+        ['role' => '["ROLE_EMPLOYEE"]']
+    );
+
+    if ($ids === []) {
+        return [];
+    }
+
+    $employees = $this->findBy(['id' => $ids]);
+
+    // Conserve l'ordre alphabétique.
+    usort($employees, static function (User $a, User $b): int {
+        return [$a->getLastName(), $a->getFirstName()]
+            <=> [$b->getLastName(), $b->getFirstName()];
+    });
+
+    return $employees;
+}
 
 //    /**
 //     * @return User[] Returns an array of User objects
