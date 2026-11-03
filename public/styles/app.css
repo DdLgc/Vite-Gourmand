@@ -202,6 +202,16 @@ nav a:hover,
     display: none;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
 @media (max-width: 900px) {
     .filters {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -211,5 +221,90 @@ nav a:hover,
 @media (max-width: 600px) {
     .filters {
         grid-template-columns: 1fr;
+    }
+}
+/*===========\\Admin dashboard//=========== */
+
+.admin-dashboard {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+}
+
+.admin-dashboard h1 {
+    margin-bottom: 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.dashboard-card {
+    padding: 2rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgb(0 0 0 / 10%);
+}
+
+.dashboard-card h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.3rem;
+}
+
+.dashboard-card p {
+    line-height: 1.6;
+}
+
+/* Gestion des employés */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.employees-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+.employees-table th,
+.employees-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.employees-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+.employees-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+@media (max-width: 768px) {
+    .employees-table {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+        padding: 1.5rem;
     }
 }
